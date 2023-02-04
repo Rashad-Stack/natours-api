@@ -5,8 +5,13 @@ const userRoutes = require("./routes/userRoutes");
 
 // Middle wares
 const app = express();
-app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
+
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // routes middleware
 app.use("/api/v1/tours", toursRoutes);
