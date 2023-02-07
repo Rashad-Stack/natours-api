@@ -36,7 +36,7 @@ const sendErrorProd = (err, res) => {
     // Programing or other unknown error: don't leak error details
   } else {
     // 1) Log Error
-    console.error("Error", err);
+    console.error("Error 🎆", err);
 
     // 2) Send Generic Message
     res.status(500).json({
@@ -47,7 +47,9 @@ const sendErrorProd = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-  console.log(err.name);
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
+
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
