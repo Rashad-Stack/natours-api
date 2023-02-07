@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon server.js",
-    "build": "set NODE_ENV=production && nodemon server.js",
+    "build": "set NODE_ENV=production&& nodemon server.js",
     "lint": "eslint . --ext js",
     "debug": "ndb server.js"
   },
