@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid Email"],
   },
+  role: {
+    type: String,
+    enum: ["user", "guide", "lead-guid", "admin"],
+    default: "user",
+  },
   photo: String,
 
   password: {
@@ -62,11 +67,6 @@ userSchema.methods.correctPassword = async function (
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const tokenCreatedAt = new Date(JWTTimestamp * 1000);
-    console.log(
-      "🚀 ~ file: userModels.js:65 ~ changedTimeStamp",
-      tokenCreatedAt,
-      this.passwordChangedAt
-    );
     // true means user changed password after the token generate.
     return tokenCreatedAt < this.passwordChangedAt;
   }
