@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
-  resetTokenExpires: String,
+  resetTokenExpires: Date,
 });
 
 userSchema.pre("save", async function (next) {
@@ -57,6 +57,13 @@ userSchema.pre("save", async function (next) {
 
   //   cleared the password confirm field
   this.passwordConfirm = undefined;
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  if (this.isDirectModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
@@ -73,6 +80,8 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     // true means user changed password after the token generate.
     return tokenCreatedAt < this.passwordChangedAt;
   }
+
+  // False means NOT changed
   return false;
 };
 
