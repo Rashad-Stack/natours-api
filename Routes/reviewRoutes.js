@@ -4,11 +4,13 @@ const reviewsController = require("../controller/reviewsController");
 
 const router = express.Router({ mergeParams: true });
 
+// Bellows are protected router
+router.use(authController.protect);
+
 router
   .route("/")
   .get(reviewsController.getAllReviews)
   .post(
-    authController.protect,
     authController.restrictTo("user"),
     reviewsController.setTourUserIds,
     reviewsController.createReview
@@ -17,7 +19,13 @@ router
 router
   .route("/:id")
   .get(reviewsController.getReview)
-  .patch(reviewsController.updateReview)
-  .delete(authController.protect, reviewsController.deleteReview);
+  .patch(
+    authController.restrictTo("user", "admin"),
+    reviewsController.updateReview
+  )
+  .delete(
+    authController.restrictTo("user", "admin"),
+    reviewsController.deleteReview
+  );
 
 module.exports = router;
