@@ -18,6 +18,7 @@ router
   .route("/")
   .get(authController.protect, toursController.getAllTours)
   .post(toursController.createTour);
+
 router
   .route("/:id")
   .get(toursController.getTour)
