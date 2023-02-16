@@ -18,6 +18,10 @@ router
     authController.restrictTo("admin", "lead-guide", "guide"),
     toursController.monthlyPlan
   );
+router
+  .route("/tours-within/:distance/center/:latlng/unit/:unit")
+  .get(toursController.getToursWithin);
+router.route("/distances/:latlng/unit/:unit").get(toursController.getDistances);
 
 router
   .route("/")
