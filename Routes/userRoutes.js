@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.get("/logout", authController.logout);
 router.post("/forgot-password", authController.forgotPassword);
 router.patch("/reset-password/:token", authController.resetPassword);
 
@@ -14,7 +15,11 @@ router.use(authController.protect);
 
 router.patch("/update-password", authController.updatePassword);
 router.get("/me", usersController.getMe, usersController.getUser);
-router.patch("/update-me", usersController.updateMe);
+router.patch(
+  "/update-me",
+  usersController.uploadPhoto,
+  usersController.updateMe
+);
 router.delete("/delete-account", usersController.deleteMe);
 
 //  Belows are protected by admin
