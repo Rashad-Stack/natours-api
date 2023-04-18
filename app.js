@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const toursRoutes = require("./routes/tourRoutes");
 const userRoutes = require("./routes/userRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const bookingsRoutes = require("./routes/bookingsRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controller/errorControllers");
@@ -78,6 +79,7 @@ app.use("/api", limit);
 app.use("/api/v1/tours", toursRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/bookings", bookingsRoutes);
 
 app.all("*", (req, res, next) => {
   next(

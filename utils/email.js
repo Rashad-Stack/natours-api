@@ -10,9 +10,15 @@ module.exports = class Email {
     this.from = `Rashad Stack <${process.env.EMAIL_FROM}>`;
   }
 
-  createTransport() {
+  newTransport() {
     if (process.env.NODE_ENV === "production") {
-      return 1;
+      return nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.GMAIL_ADD,
+          pass: process.env.GMAIL_PASS,
+        },
+      });
     }
 
     return nodemailer.createTransport({
@@ -26,14 +32,11 @@ module.exports = class Email {
   }
 
   async send(template, subject) {
-    const html = pug.renderFile(
-      `${__dirname}/../views/emails/${template}.pug`,
-      {
-        firstName: this.firstName,
-        url: this.url,
-        subject,
-      }
-    );
+    const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject,
+    });
 
     // 2) Define the email option
     const mailOptions = {
@@ -41,7 +44,7 @@ module.exports = class Email {
       to: this.to,
       subject: subject,
       html,
-      text: htmlToText.fromString(html),
+      text: htmlToText.convert(html),
     };
 
     // 3) Create transport and send email
@@ -50,5 +53,12 @@ module.exports = class Email {
 
   async sendWelcome() {
     this.send("Welcome", "Welcome to the natours family");
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      "passwordReset",
+      "Your password reset token (valid for only 10 minutes)"
+    );
   }
 };
